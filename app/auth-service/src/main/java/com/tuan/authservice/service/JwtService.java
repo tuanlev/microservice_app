@@ -48,14 +48,26 @@ public class JwtService  {
                 .signWith(Keys.hmacShaKeyFor(rotationKey.getBytes()))
                 .compact();
     }
-    public Claims getClaimsFromToken(String token) {
+
+    public User verifyAccessToken(String token) {
         return Jwts.parser()
                 .verifyWith(Keys.hmacShaKeyFor(accessKey.getBytes())) // Xác thực key
                 .build()
                 .parseSignedClaims(token)
-                .getPayload();
+                .getPayload().get("user",User.class);
     }
-    public User getBody(String token) {
-        return getClaimsFromToken(token).get("user",User.class);
+    public User verifyRefreshToken(String token) {
+        return Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(refreshKey.getBytes())) // Xác thực key
+                .build()
+                .parseSignedClaims(token)
+                .getPayload().get("user",User.class);
+    }
+    public User verifyRotationToken(String token) {
+        return Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(rotationKey.getBytes())) // Xác thực key
+                .build()
+                .parseSignedClaims(token)
+                .getPayload().get("user",User.class);
     }
 }
