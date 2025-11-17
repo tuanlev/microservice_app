@@ -1,6 +1,7 @@
 package com.tuan.authservice.service;
 
 
+import com.tuan.authservice.Model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
@@ -13,12 +14,12 @@ import java.util.Date;
 @Slf4j
 @Service
 public class JwtService  {
-    @Value("${jwt.access-key}")
+    @Value("${jwt.access.key}")
     private String accessKey;
-    public String generateToken () {
+    public String generateToken (User data) {
         log.info(accessKey);
         return Jwts.builder()
-                .claim("user","name")
+                .claim("user",data)
                 .expiration(new Date(System.currentTimeMillis()+3600*1000))
                 .signWith(Keys.hmacShaKeyFor(accessKey.getBytes()))
                 .compact();
@@ -30,7 +31,7 @@ public class JwtService  {
                 .parseSignedClaims(token)
                 .getPayload();
     }
-    public String getBody(String token) {
-        return getClaimsFromToken(token).get("user",String.class);
+    public User getBody(String token) {
+        return getClaimsFromToken(token).get("user",User.class);
     }
 }

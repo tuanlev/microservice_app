@@ -1,4 +1,7 @@
 package com.tuan.authservice.controller;
+import com.tuan.authservice.response.ResponseSuccess;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import com.tuan.authservice.Model.User;
 import com.tuan.authservice.dtos.LoginDTO;
@@ -10,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
         import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
@@ -20,17 +23,17 @@ public class AuthController {
 
     // ===== REGISTER =====
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterDTO registerDTO) {
         Optional<User> created = userService.CreateUser(registerDTO);
         return ResponseEntity.ok(created);
     }
 
     // ===== LOGIN =====
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
         Optional<User> user = userService.login(loginDTO);
-
         if (user.isPresent()) {
+            log.info(user.get().toString());
             return ResponseEntity.ok(user.get());
         }
         return ResponseEntity.status(401).body("Invalid username or password");
@@ -38,7 +41,10 @@ public class AuthController {
 
     // ===== GET ALL =====
     @GetMapping
-    public ResponseEntity<List<User>> getAll() {
-        return ResponseEntity.ok(userService.findAll());
+    public ResponseEntity<ResponseSuccess> getAll() {
+        return ResponseEntity.ok(
+                ResponseSuccess.builder().
+                        message("Successfully").data((Object) userService.findAll()).build()
+        );
     }
 }

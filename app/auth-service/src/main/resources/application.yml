@@ -26,5 +26,10 @@ spring:
 
 
 jwt:
-  access-key: tuandeptraiiuadysfhashdfkahsdfkjhasjdfhkjasdhdf
+  access:
+    key: tuandeptraiiuadysfhashdfkahsdfkjhasjdfhkjasdhdf
+    expired: 50000
+  refresh:
+    key: tuandeptraiiuadysfhashdfkahsdfkjhasjdfhkjasdhdf
+    expired: 50000
 debug: true

@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class LoginDTO {
-    @NotNull
+    @NotNull(message = "username required")
     private String username;
-    @NotNull
+    @NotNull(message = "username required")
     private String password;
 }
