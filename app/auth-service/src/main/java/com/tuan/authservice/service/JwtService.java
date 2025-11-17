@@ -1,6 +1,7 @@
 package com.tuan.authservice.service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tuan.authservice.Model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.Date;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -18,11 +20,11 @@ public class JwtService  {
     private String accessKey;
     @Value("${jwt.access.expiration}")
     private int accessExpiration;
-    @Value("${jwt.refresh.key.key}")
+    @Value("${jwt.refresh.key}")
     private String refreshKey;
-    @Value("${jwt.refresh.expiration.expiration}")
+    @Value("${jwt.refresh.expiration}")
     private int refreshExpiration;
-    @Value("${jwt.rotation.key.key}")
+    @Value("${jwt.rotation.key}")
     private String rotationKey;
     @Value("${jwt.rotation.expiration}")
     private int rotationExpiration;
@@ -50,24 +52,27 @@ public class JwtService  {
     }
 
     public User verifyAccessToken(String token) {
-        return Jwts.parser()
-                .verifyWith(Keys.hmacShaKeyFor(accessKey.getBytes())) // Xác thực key
-                .build()
-                .parseSignedClaims(token)
-                .getPayload().get("user",User.class);
+        Claims claims = Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(accessKey.getBytes()))
+                .build().parseSignedClaims(token).getPayload();
+
+        Map<String, Object> userMap = (Map<String, Object>) claims.get("user");
+        return new ObjectMapper().convertValue(userMap, User.class);
     }
     public User verifyRefreshToken(String token) {
-        return Jwts.parser()
-                .verifyWith(Keys.hmacShaKeyFor(refreshKey.getBytes())) // Xác thực key
-                .build()
-                .parseSignedClaims(token)
-                .getPayload().get("user",User.class);
+        Claims claims = Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(refreshKey.getBytes()))
+                .build().parseSignedClaims(token).getPayload();
+
+        Map<String, Object> userMap = (Map<String, Object>) claims.get("user");
+        return new ObjectMapper().convertValue(userMap, User.class);
     }
     public User verifyRotationToken(String token) {
-        return Jwts.parser()
-                .verifyWith(Keys.hmacShaKeyFor(rotationKey.getBytes())) // Xác thực key
-                .build()
-                .parseSignedClaims(token)
-                .getPayload().get("user",User.class);
+        Claims claims = Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(rotationKey.getBytes()))
+                .build().parseSignedClaims(token).getPayload();
+
+        Map<String, Object> userMap = (Map<String, Object>) claims.get("user");
+        return new ObjectMapper().convertValue(userMap, User.class);
     }
 }

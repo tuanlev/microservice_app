@@ -1,7 +1,9 @@
 package com.tuan.authservice.controller;
 import com.tuan.authservice.response.ResponseSuccess;
+import com.tuan.authservice.service.JwtService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.antlr.v4.runtime.Token;
 import org.springframework.web.bind.annotation.*;
 import com.tuan.authservice.Model.User;
 import com.tuan.authservice.dtos.LoginDTO;
@@ -17,7 +19,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
+    @Autowired
+    JwtService jwtService;
     @Autowired
     private UserService userService;
 
@@ -34,17 +37,11 @@ public class AuthController {
         Optional<User> user = userService.login(loginDTO);
         if (user.isPresent()) {
             log.info(user.get().toString());
-            return ResponseEntity.ok(user.get());
+            String token = jwtService.generateAccessToken(user.get());
+            return ResponseEntity.ok().body(List.of(token,user.get(),jwtService.verifyAccessToken(token)));
         }
         return ResponseEntity.status(401).body("Invalid username or password");
     }
 
-    // ===== GET ALL =====
-    @GetMapping
-    public ResponseEntity<ResponseSuccess> getAll() {
-        return ResponseEntity.ok(
-                ResponseSuccess.builder().
-                        message("Successfully").data((Object) userService.findAll()).build()
-        );
-    }
+    // ===== GET ALL ====
 }
