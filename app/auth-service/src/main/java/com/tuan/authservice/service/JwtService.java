@@ -16,12 +16,36 @@ import java.util.Date;
 public class JwtService  {
     @Value("${jwt.access.key}")
     private String accessKey;
-    public String generateToken (User data) {
-        log.info(accessKey);
+    @Value("${jwt.access.expiration}")
+    private int accessExpiration;
+    @Value("${jwt.refresh.key.key}")
+    private String refreshKey;
+    @Value("${jwt.refresh.expiration.expiration}")
+    private int refreshExpiration;
+    @Value("${jwt.rotation.key.key}")
+    private String rotationKey;
+    @Value("${jwt.rotation.expiration}")
+    private int rotationExpiration;
+
+    public String generateAccessToken (User data) {
         return Jwts.builder()
                 .claim("user",data)
-                .expiration(new Date(System.currentTimeMillis()+3600*1000))
+                .expiration(new Date(System.currentTimeMillis()+accessExpiration))
                 .signWith(Keys.hmacShaKeyFor(accessKey.getBytes()))
+                .compact();
+    }
+    public String generateRefreshToken (User data) {
+        return Jwts.builder()
+                .claim("user",data)
+                .expiration(new Date(System.currentTimeMillis()+refreshExpiration))
+                .signWith(Keys.hmacShaKeyFor(refreshKey.getBytes()))
+                .compact();
+    }
+    public String generateRotationToken (User data) {
+        return Jwts.builder()
+                .claim("user",data)
+                .expiration(new Date(System.currentTimeMillis()+rotationExpiration))
+                .signWith(Keys.hmacShaKeyFor(rotationKey.getBytes()))
                 .compact();
     }
     public Claims getClaimsFromToken(String token) {
