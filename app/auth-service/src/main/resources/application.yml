@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password:
+    username: root
+    url: jdbc:mysql://localhost:3306/springdb
+  application:
+    name: auth-service
+  grpc:
+    client:
+      channels:
+        tuan-deptrai:
+          address: static://localhost:8080
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        hbm2ddl:
+          auto: update #?? t? ??ng t?o table khi không có
+      show_sql: true
+
+
+  sql:
+    init:
+      mode: always
+
+
+jwt:
+  access-key: tuandeptraiiuadysfhashdfkahsdfkjhasjdfhkjasdhdf
+debug: true
