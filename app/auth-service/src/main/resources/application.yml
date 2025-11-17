@@ -9,7 +9,7 @@ spring:
   grpc:
     client:
       channels:
-        tuan-deptrai:
+        auth-service:
           address: static://localhost:8080
   jpa:
     properties:
@@ -28,8 +28,11 @@ spring:
 jwt:
   access:
     key: tuandeptraiiuadysfhashdfkahsdfkjhasjdfhkjasdhdf
-    expired: 50000
+    expiration: 43200000
   refresh:
     key: tuandeptraiiuadysfhashdfkahsdfkjhasjdfhkjasdhdf
-    expired: 50000
+    expiration: 1296000000
+  rotation:
+    key: tuandeptraiiuadysfhashdfkahsdfkjhasjdfhkjasdhdf
+    expiration: 43200000
 debug: true
