@@ -67,7 +67,7 @@ public class JwtService  {
         Map<String, Object> userMap = (Map<String, Object>) claims.get("user");
         return new ObjectMapper().convertValue(userMap, User.class);
     }
-    public User verifyRotationToken(String token) {
+    public User verifyRotationToken(String token)  {
         Claims claims = Jwts.parser()
                 .verifyWith(Keys.hmacShaKeyFor(rotationKey.getBytes()))
                 .build().parseSignedClaims(token).getPayload();
