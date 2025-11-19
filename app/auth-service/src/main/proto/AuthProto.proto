@@ -1,0 +1,23 @@
+syntax = "proto3";
+package auth;
+option java_multiple_files = true;
+option java_package = "io.grpc.builtin";
+option java_outer_classname = "Auth";
+
+message UserInfo {
+  int64 id = 1;
+  string username = 2;
+  string role = 3;
+}
+message AuthResponse {
+  UserInfo userInfo = 1;
+  string token = 2;
+  string message = 3;
+  string statas =4;
+}
+message AuthRequest {
+  string token = 1;
+}
+service AuthService {
+  rpc authenticate(AuthRequest) returns (AuthResponse);
+}

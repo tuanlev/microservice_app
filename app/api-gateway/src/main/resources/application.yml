@@ -1,0 +1,26 @@
+spring:
+  application:
+      name: api-gateway
+  cloud:
+    gateway:
+      json-to-grpc.enabled: false
+      server:
+        webflux:
+          routes:
+            - id: auth
+              uri: http://localhost:8080
+              predicates:
+              - Path=/auth/** # Cú pháp CHUẨN: KHÔNG CÓ DẤU CÁCH
+
+
+server:
+  port: 8081
+grpc:
+  client:
+    auth-service:
+      address:  localhost:9090
+      negotiation-type: plaintext
+logging:
+  level:
+    web: debug
+debug: true

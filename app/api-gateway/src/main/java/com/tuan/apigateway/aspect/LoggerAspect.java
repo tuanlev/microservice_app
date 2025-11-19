@@ -1,4 +1,4 @@
-package com.tuan.authservice.aspect;
+package com.tuan.apigateway.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class LoggerAspect {
-    @Around("execution(* com.tuan.authservice.*.*.*(..))")
+    @Around("execution(* com.tuan.apigateway.*.*.*(..))")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         log.info("entering around: "  + joinPoint.getSignature().getName());
         try {

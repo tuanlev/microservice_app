@@ -11,12 +11,14 @@ spring:
       channels:
         auth-service:
           address: static://localhost:8080
+
+
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         hbm2ddl:
-          auto: update #?? t? ??ng t?o table khi kh�ng c�
+          auto: update #?? t? ??ng t?o table khi không có
       show_sql: true
 
 
@@ -36,3 +38,15 @@ jwt:
     key: tuandeptraiiuadysfhashdfkahsdfkjhasjdfhkjasdhdf
     expiration: 43200000
 debug: true
+logging:
+  level:
+    org:
+      springframework: DEBUG
+  logging:
+    level:
+      io:
+
+        grpc: DEBUG                  # nếu muốn giữ log gRPC
+        netty: DEBUG
+        netty.handler.codec.http2: TRACE
+        netty.channel: DEBUG

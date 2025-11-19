@@ -12,4 +12,5 @@ public class ResponseSuccess {
     final boolean success = true;
     String message;
     Object data;
+    int status;
 }

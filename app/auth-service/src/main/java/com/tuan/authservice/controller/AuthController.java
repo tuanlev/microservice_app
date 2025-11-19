@@ -23,31 +23,21 @@ public class AuthController {
     JwtService jwtService;
     @Autowired
     private AuthService userService;
-
     // ===== REGISTER =====
     @PostMapping("/register")
     public ResponseEntity<ResponseSuccess> register(@Valid @RequestBody RegisterDTO registerDTO) {
-        Optional<User> created = userService.CreateUser(registerDTO);
-        return ResponseEntity.status(HttpStatusCode.valueOf(201))
-                .body(ResponseSuccess.builder()
-                        .message("User registered successfully!")
-                        .data(Map.of("User",created.get()))
-                    .build());
+        ResponseSuccess responseSuccess = userService.CreateUser(registerDTO);
+        return ResponseEntity.status(responseSuccess.getStatus()).body(
+                responseSuccess
+        );
     }
-
     // ===== LOGIN =====
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
-        Optional<User> user = userService.login(loginDTO);
-        if (user.isPresent()) {
-            log.info(user.get().toString());
-            String token = jwtService.generateAccessToken(user.get());
-            String refToken = jwtService.generateRefreshToken(user.get());
-            return ResponseEntity.ok().body(
-                    Map.of("access-token", token,"refresh-token", refToken,"user",user.get())
-            );
-        }
-        return ResponseEntity.status(401).body("Invalid username or password");
+        ResponseSuccess responseSuccess = userService.login(loginDTO);
+        return ResponseEntity.status(responseSuccess.getStatus()).body(
+                responseSuccess
+        );
     }
 
 
